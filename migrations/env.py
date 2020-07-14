@@ -18,12 +18,18 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from models import Keywords, WordPool, MinionImagePool
+from models import (
+    Keywords,
+    WordPool,
+    MinionImagePool,
+    WeatherLocationMap,
+)
 
 target_metadata = [
     Keywords.metadata,
     WordPool.metadata,
     MinionImagePool.metadata,
+    WeatherLocationMap.metadata,
 ]
 
 # other values from the config, defined by the needs of env.py,

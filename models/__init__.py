@@ -1,6 +1,7 @@
 from .keywords import Keywords
 from .word_pool import WordPool
 from .minion_image_pool import MinionImagePool
+from .weather_location_map import WeatherLocationMap
 
 from config import settings
 
