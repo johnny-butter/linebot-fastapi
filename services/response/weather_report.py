@@ -35,6 +35,8 @@ class WeatherReport(Base):
             params=query_params
         )
 
+        print(f'=====> response: {resp.json()}')
+
         if not resp.ok:
             return 'Can not get weather report'
 
