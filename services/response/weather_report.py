@@ -1,4 +1,5 @@
 import requests
+import pytz
 from services.response.base import Base
 from linebot.models import TextSendMessage
 from datetime import datetime, timedelta
@@ -10,7 +11,8 @@ class WeatherReport(Base):
 
     def __init__(self, *args, **kwargs):
         super(WeatherReport, self).__init__(**kwargs)
-        self.current_time = datetime.now()
+        tw = pytz.timezone('Asia/Taipei')
+        self.current_time = datetime.now().astimezone(tw)
 
     def response(self):
         return TextSendMessage(text=self._get_weather_report())
