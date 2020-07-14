@@ -48,7 +48,7 @@ async def bot_callback(
 
                     line_bot_api.reply_message(
                         event.reply_token,
-                        resp_cls(event.message.text).response()
+                        resp_cls(line_event_message=event.message.text).response()
                     )
 
                     break
