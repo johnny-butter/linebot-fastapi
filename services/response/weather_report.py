@@ -26,7 +26,7 @@ class WeatherReport(Base):
         query_params = {
             'Authorization': settings.WEATHER_OPEN_API_AUTH_CODE,
             'format': 'json',
-            'elementName': 'WeatherDescription',
+            'elementName': 'AT,WeatherDescription',
             'locationName': wlm.location,
             'timeFrom': self._get_current_time(),
             'timeTo': self._get_current_time(plus_hours=3),
