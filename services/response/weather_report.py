@@ -40,7 +40,7 @@ class WeatherReport(Base):
         if not resp.ok:
             return 'Can not get weather report'
 
-        return self._parse_weather_data(resp.json())
+        return Weather(resp.json()).report
 
     def _get_weather_location_map(self):
         if not self.line_event_message:
@@ -63,13 +63,48 @@ class WeatherReport(Base):
 
         return current_time.strftime('%Y-%m-%dT%H:%M:%S')
 
-    def _parse_weather_data(self, data):
-        weather_dict = data['records']['locations'][0]
 
-        weather_location = f'{weather_dict["location"][0]["locationName"]}@{weather_dict["locationsName"]}'
-        weather_desc = weather_dict['location'][0]['weatherElement'][0]['time'][0]['elementValue'][0]['value']
+class Weather:
+    def __init__(self, raw_data):
+        self.city_data = raw_data['records']['locations'][0]
+        self.district_data = self.city_data['location'][0]
+        for element in self.district_data['weatherElement']:
+            if element['elementName'] == 'AT':
+                self.at_element = element
+            elif element['elementName'] == 'WeatherDescription':
+                self.weather_desc_element = element
 
-        return f'{weather_location}:\n{weather_desc}'
+    @property
+    def report(self):
+        report = [
+            f'⚓{self.weather_location}',
+            f'⌚{self.report_start_time}~{self.report_end_time}',
+            f'ℹ️{self.weather_desc}體感溫度攝氏{self.weather_at}度。',
+        ]
+
+        return '\n'.join(report)
+
+    @property
+    def weather_location(self):
+        return f"{self.district_data['locationName']}@{self.city_data['locationsName']}"
+
+    @property
+    def weather_at(self):
+        return self.at_element['time'][0]['elementValue'][0]['value']
+
+    @property
+    def weather_desc(self):
+        return self.weather_desc_element['time'][0]['elementValue'][0]['value']
+
+    @property
+    def report_start_time(self):
+        start_time = datetime.strptime(self.weather_desc_element['time'][0]['startTime'], '%Y-%m-%d %H:%M:%S')
+        return start_time.strftime('(%m-%d)%H:%M')
+
+    @property
+    def report_end_time(self):
+        end_time = datetime.strptime(self.weather_desc_element['time'][0]['endTime'], '%Y-%m-%d %H:%M:%S')
+        return end_time.strftime('(%m-%d)%H:%M')
 
 
 if __name__ == '__main__':
