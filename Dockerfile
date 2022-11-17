@@ -1,5 +1,8 @@
 FROM python:3.6.11-slim
 
+# for Heroku release phase logging
+RUN apt-get update && apt-get install -y curl
+
 WORKDIR /app
 
 COPY requirements.txt .
