@@ -10,6 +10,6 @@ uvicorn==0.11.5
 gunicorn==19.9.0
 
 line-bot-sdk==1.8.0
-requests==2.20.0
+requests==2.31.0
 beautifulsoup4==4.9.1
 pytz==2018.6
